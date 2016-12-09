@@ -1,11 +1,13 @@
 //@TODO User set to cookie/session storage
-//@TODO edit messages div -> textarea
-//@TODO edit messages in modal window
+//@TODO edit TASK div -> textarea
+
+//@TODO edit TASK in modal window !!!!!
+
 //@TODO round photo
 //@TODO tags date,
-//@TODO empty message,
-//@TODO NO messages yet,
-//@TODO Response about success message,
+//@TODO empty TASK,
+//@TODO NO TASK yet,
+//@TODO Response about success TASK,
 
 
 (function($){
@@ -43,7 +45,8 @@
 				id: key,
 				message: res.message,
 				user: res.user,
-				date: res.date
+				date: res.date,
+				status: res.status
 			};
 		},
 
@@ -101,43 +104,61 @@
 
 	// Make a button clear all???
 	// User data in session storage
+
+
+	//document.getElementById('message-form').addEventListener('submit', function (event) {
+	//	console.log("Test");
+	//	event.preventDefault();
+	//});
+
 	$(document).ready(function () {
 
-		var data = App.getAllFromStorage();
+		var tasks = App.getAllFromStorage();
+		var dataContainer = document.getElementById('data');
 
-		for (var item in data) {
-			if (data.hasOwnProperty(item)) {
-				$("#data").append($("<div class=\"message-"+ item +" visible\" data-id=" + item + ">" +
-					"<p>" + data[item].message + "</p>" +
-					"<em>" + data[item].user + " " + data[item].date + "</em>" +
-					"</div>"));
-			}
+		function createTask(id, text) {
+
+			//	//"<em>" + result.user + " " + result.date + "</em>" +
+
+			var task = document.createElement('div');
+			task.classList.add('message-' + id);
+			task.classList.add('visible');
+			task.setAttribute('data-id', id);
+
+			var textElement = document.createElement('p');
+			textElement.classList.add('task-text');
+			textElement.textContent = text;
+
+			task.appendChild(textElement);
+			return task;
 		}
 
-		$(".edit").on('click', function() {
-			var id = $(this).closest('li').data('id');
-			App.editMessage(id);
-		});
+		for (var item in tasks) {
+			if (tasks.hasOwnProperty(item)) {
+				var messageElement = createTask(item, tasks[item].message);
+				dataContainer.appendChild(messageElement);
+			}
+		}
 
 		$("#message-form").on('submit', function (event) {
 			var date = new Date();
 			var formattedDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
 
-			var message = $('textarea[name="message"]').val();
+			var taskText = document.getElementById('task').value;
 
-			if (message.length != 0) {
+			if (taskText.length != 0) {
 				var item = {
 					user: 'Daniil Sydorenko',
-					message: message,
-					date: formattedDate
+					message: taskText,
+					date: formattedDate,
+					status: 1
 				};
 
 				var result = App.saveToStorage(null, item);
 
-				$("#data").append($("<div class=\"message-"+ result.id +"\">" +
-					"<p>" + message + "</p>" +
-					"<em>" + result.user + " " + result.date + "</em>" +
-					"</div>"));
+				// Create and add task to the list
+				var messageElement = createTask(result.id, taskText);
+				dataContainer.appendChild(messageElement);
 
 				setTimeout(function () {
 					$(".message-" + result.id).addClass("visible");
@@ -147,16 +168,6 @@
 			event.preventDefault();
 		});
 
-		$("#edit-form").on('submit', function (event) {
-			var text = $(".message-text").val();
-			var id = $(".message-id").val();
-			console.log(text, id);
-			App.saveToStorage(id, text);
-
-			//$("#data").append($("<li>").text(key + " - " + text));
-
-			event.preventDefault();
-		});
 
 	});
 

@@ -24,7 +24,7 @@ body {
 .wrapper {
     height: 100vh;
     width: 100%;
-    background: #ffffff;
+    background: #fbfbfb;
 
 }
 
@@ -88,12 +88,13 @@ body {
 }
 
 .content-messages #data [class^="message-"] {
-    width: 100%;
-    background: #fbfbfb;
+    width: 90%;
+    background: #ffffff;
     border: thin solid #f3f3f5;
-    box-shadow: 5px 5px 8px rgba(100,100,100,0.1), 7px 7px 6px rgba(100,100,100,0.1);
+    /*box-shadow: 5px 5px 8px rgba(100,100,100,0.1), 7px 7px 6px rgba(100,100,100,0.1);*/
+    box-shadow: 2px 2px 4px rgba(100,100,100,0.1);
     padding: 15px;
-    margin: 15px;
+    margin: 0 0 15px 0;
     box-sizing: border-box;
     text-align: right;
     opacity: 0;
@@ -106,6 +107,15 @@ body {
     opacity 0.2s linear;
 }
 
+.content-messages #data [class^="message-"]:last-of-type {
+    margin: 0;
+}
+
+.content-messages #data [class^="message-"]:hover {
+    box-shadow: 1px 1px 2px rgba(100,100,100,0.1);
+    transition: all .1s ease;
+}
+
 .content-messages #data [class^="message-"].visible {
     visibility: visible;
     opacity: 1;
@@ -113,26 +123,67 @@ body {
 
 .content-messages #data [class^="message-"] p {
     text-align: left;
+    margin: 0;
 }
 
 .content-messages #data [class^="message-"] em {
     font-size: .8rem;
 }
 
-.content .content-form {}
+.content .content-form {
+    margin-bottom: 30px;
+}
 
 .content .content-form form {
-
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .content .content-form fieldset {
     border: none;
     padding: 0;
     margin: 0;
+    flex: 90%;
 }
 
-.content .content-form textarea {
-    width: 50%;
+.content .content-form fieldset:nth-child(2) {
+    position: absolute;
+}
+
+.content .content-form button {
+    border-left: thin solid rgb(221, 227, 243) !important;
+    border: none;
+    background: transparent;
+    color: #dde3f3;
+    outline: none;
+    box-shadow: none;
+    font-size: 17px;
+    padding: 14px 20px;
+    cursor: pointer;
+    line-height: 22px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+}
+
+.content .content-form input {
+    width: 100% !important;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 22px;
+    height: 50px;
+    padding: 14px 55px 14px 0;
+    color: #414141;
+    font-family: inherit;
+    border: thin solid rgb(221, 227, 243);
+    outline: none;
+    text-indent: 14px;
 }
 
 /* Footer */

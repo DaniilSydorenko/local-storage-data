@@ -1,8 +1,6 @@
 /* Common styles
 =================================*/
 
-
-
 /* Base styles
 =================================*/
 
@@ -159,7 +157,7 @@ button {
 
     background: #ffffff;
     border: thin solid #f3f3f5;
-    box-shadow: 2px 2px 4px rgba(100,100,100,0.1);
+    box-shadow: 2px 2px 4px rgba(100, 100, 100, 0.1);
     padding: 15px;
     margin: 0 0 15px 0;
     opacity: 0;
@@ -173,7 +171,7 @@ button {
 }
 
 .content-messages #data [class^="message-"]:hover {
-    box-shadow: 1px 1px 2px rgba(100,100,100,0.1);
+    box-shadow: 1px 1px 2px rgba(100, 100, 100, 0.1);
     transition: all .1s ease;
 }
 
@@ -204,10 +202,7 @@ button {
     min-width: 50px;
     padding: 10px;
     flex: 5%;
-
     border: thin solid #f1f1f1;
-
-
 }
 
 /* Footer */
@@ -220,7 +215,7 @@ button {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: rgba(30,30,30,.7);
+    background: rgba(30, 30, 30, .7);
     top: 0;
 
     /* flex-box */
@@ -241,11 +236,11 @@ button {
 
 /* Media queries
 =================================*/
-@media screen and (max-width: 1200px){
+@media screen and (max-width: 1200px) {
 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
     .header .nav-bar-menu {
         height: 0;
@@ -278,6 +273,6 @@ button {
     }
 }
 
-@media screen and (max-width: 520px){
+@media screen and (max-width: 520px) {
 
 }

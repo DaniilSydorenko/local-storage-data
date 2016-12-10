@@ -28,6 +28,13 @@
 			});
 		},
 
+		//App.getData('storage/user.json', getUser);
+		//
+		//function getUser(data) {
+		//	//console.log(data);
+		//}
+
+
 		getMessageCount: function () {
 			// can make count by key...
 			return Object.keys(localStorage).length;
@@ -84,95 +91,84 @@
 
 	App.init();
 
-	//App.getData('storage/user.json', getUser);
-	//
-	//function getUser(data) {
-	//	//console.log(data);
-	//}
+	var DOM = {
+		// create task
 
-	// Make a button clear all???
-	// User data in session storage
+	};
 
 
-	//document.getElementById('message-form').addEventListener('submit', function (event) {
-	//	console.log("Test");
-	//	event.preventDefault();
-	//});
+	var tasks = App.getAllFromStorage();
+	var dataContainer = document.getElementById('data');
 
-	$(document).ready(function () {
+	function createTask(id, text) {
 
-		var tasks = App.getAllFromStorage();
-		var dataContainer = document.getElementById('data');
+		//	//"<em>" + result.user + " " + result.date + "</em>" +
 
-		function createTask(id, text) {
+		var task = document.createElement('div');
+		task.classList.add('message-' + id);
+		task.classList.add('visible');
+		task.setAttribute('data-id', id);
 
-			//	//"<em>" + result.user + " " + result.date + "</em>" +
+		var textContainer = document.createElement('div');
+		textContainer.classList.add('text-container');
 
-			var task = document.createElement('div');
-			task.classList.add('message-' + id);
-			task.classList.add('visible');
-			task.setAttribute('data-id', id);
+		var textElement = document.createElement('p');
+		textElement.classList.add('task-text');
+		textElement.textContent = text;
 
-			var textContainer = document.createElement('div');
-			textContainer.classList.add('text-container');
+		var buttonDone = document.createElement('button');
+		buttonDone.classList.add('button-done');
 
-			var textElement = document.createElement('p');
-			textElement.classList.add('task-text');
-			textElement.textContent = text;
+		var buttonRemove = document.createElement('button');
+		buttonRemove.classList.add('button-remove');
 
-			var buttonDone = document.createElement('button');
-			buttonDone.classList.add('button-done');
+		var buttonInfo = document.createElement('button');
+		buttonInfo.classList.add('button-info');
 
-			var buttonRemove = document.createElement('button');
-			buttonRemove.classList.add('button-remove');
+		textContainer.appendChild(textElement);
+		task.appendChild(buttonDone);
+		task.appendChild(textContainer);
+		task.appendChild(buttonRemove);
+		task.appendChild(buttonInfo);
+		return task;
+	}
 
-			var buttonInfo = document.createElement('button');
-			buttonInfo.classList.add('button-info');
+	for (var item in tasks) {
+		if (tasks.hasOwnProperty(item)) {
+			var messageElement = createTask(item, tasks[item].message);
+			dataContainer.appendChild(messageElement);
+		}
+	}
 
-			textContainer.appendChild(textElement);
-			task.appendChild(buttonDone);
-			task.appendChild(textContainer);
-			task.appendChild(buttonRemove);
-			task.appendChild(buttonInfo);
-			return task;
+	/**
+	 * Events listeners
+	 */
+	document.getElementById('message-form').addEventListener('submit', function (event) {
+		var date = new Date();
+		var formattedDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
+
+		var taskText = document.getElementById('task').value;
+
+		if (taskText.length != 0) {
+			var item = {
+				user: 'Daniil Sydorenko',
+				message: taskText,
+				date: formattedDate,
+				status: 1
+			};
+
+			var result = App.saveToStorage(null, item);
+
+			// Create and add task to the list
+			var messageElement = createTask(result.id, taskText);
+			dataContainer.appendChild(messageElement);
+
+			setTimeout(function () {
+				document.querySelector(".message-" + result.id).classList.add('visible');
+			}, 100);
 		}
 
-		for (var item in tasks) {
-			if (tasks.hasOwnProperty(item)) {
-				var messageElement = createTask(item, tasks[item].message);
-				dataContainer.appendChild(messageElement);
-			}
-		}
-
-		$("#message-form").on('submit', function (event) {
-			var date = new Date();
-			var formattedDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
-
-			var taskText = document.getElementById('task').value;
-
-			if (taskText.length != 0) {
-				var item = {
-					user: 'Daniil Sydorenko',
-					message: taskText,
-					date: formattedDate,
-					status: 1
-				};
-
-				var result = App.saveToStorage(null, item);
-
-				// Create and add task to the list
-				var messageElement = createTask(result.id, taskText);
-				dataContainer.appendChild(messageElement);
-
-				setTimeout(function () {
-					document.querySelector(".message-" + result.id).classList.add('visible');
-				}, 100);
-			}
-
-			event.preventDefault();
-		});
-
-
+		event.preventDefault();
 	});
 
 

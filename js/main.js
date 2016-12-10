@@ -1,11 +1,10 @@
 //@TODO User set to cookie/session storage
-//@TODO edit TASK div -> textarea
 
 //@TODO edit TASK in modal window !!!!!
 
-//@TODO round photo
-//@TODO tags date,
-//@TODO empty TASK,
+//@TODO info about task
+//@TODO remove task
+//@TODO DONE task
 //@TODO NO TASK yet,
 //@TODO Response about success TASK,
 
@@ -166,8 +165,8 @@
 				dataContainer.appendChild(messageElement);
 
 				setTimeout(function () {
-					$(".message-" + result.id).addClass("visible");
-				}, 10);
+					document.querySelector(".message-" + result.id).classList.add('visible');
+				}, 100);
 			}
 
 			event.preventDefault();

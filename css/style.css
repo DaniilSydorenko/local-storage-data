@@ -1,5 +1,4 @@
-/* Common styles
-=================================*/
+@charset "UTF-8";
 
 /* Base styles
 =================================*/
@@ -19,11 +18,18 @@ button {
     background: transparent;
     outline: none;
     box-shadow: none;
+    border: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
     -o-appearance: none;
+
+    border-left: thin solid rgb(221, 227, 243) !important;
+    color: #dde3f3;
+    font-size: 17px;
+    padding: 14px 20px;
+    line-height: 22px;
 }
 
 .container {
@@ -39,7 +45,6 @@ button {
     height: 100vh;
     width: 100%;
     background: #fbfbfb;
-
 }
 
 /* Header */
@@ -68,14 +73,11 @@ button {
     height: 47px;
     width: 70px;
     border: thin solid #ececec;
-    background: transparent;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-right: 1rem;
-    cursor: pointer;
-    outline: none;
-    margin-top: 6px;
+    margin: 6px 16px 0 0;
+    padding: 0 5px;
     float: right;
 }
 
@@ -95,10 +97,6 @@ button {
 }
 
 /* Form */
-.content .content-form {
-    /*margin-bottom: 30px;*/
-}
-
 .content .content-form form {
     display: flex;
     justify-content: flex-end;
@@ -119,12 +117,7 @@ button {
 }
 
 .content .content-form button {
-    border-left: thin solid rgb(221, 227, 243) !important;
-    border: none;
-    color: #dde3f3;
-    font-size: 17px;
     padding: 14px 20px;
-    line-height: 22px;
 }
 
 .content .content-form input {
@@ -143,14 +136,15 @@ button {
 
 /* Messages */
 .content-messages #completed-tasks,
-.content-messages #uncompleted-tasks{
+.content-messages #uncompleted-tasks {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin: 20px 0;
 }
 
-.content-messages  [class^="message-"] {
+.content-messages [class^="message-"] {
     width: 90%;
     display: flex;
     justify-content: flex-start;
@@ -159,7 +153,7 @@ button {
     background: #ffffff;
     border: thin solid #f3f3f5;
     box-shadow: 2px 2px 4px rgba(100, 100, 100, 0.1);
-    padding: 15px;
+    padding: 10px;
     margin: 0 0 15px 0;
     opacity: 0;
     visibility: hidden;
@@ -167,47 +161,40 @@ button {
     opacity 0.2s linear;
 }
 
-.content-messages  [class^="message-"]:last-of-type {
+.content-messages [class^="message-"]:last-of-type {
     margin: 0;
 }
 
-.content-messages  [class^="message-"]:hover {
+.content-messages [class^="message-"]:hover {
     box-shadow: 1px 1px 2px rgba(100, 100, 100, 0.1);
     transition: all .1s ease;
 }
 
-.content-messages  [class^="message-"].visible {
+.content-messages [class^="message-"].visible {
     visibility: visible;
     opacity: 1;
 }
 
-.content-messages  [class^="message-"] p {
+.content-messages [class^="message-"] p {
     text-align: left;
+    font-size: 15px;
     margin: 0;
 }
 
-.content-messages  [class^="message-"] em {
-    font-size: .8rem;
-}
-
-.content-messages  [class^="message-"] .text-container {
+.content-messages [class^="message-"] .text-container {
     flex: 85%;
     padding: 0 5px;
 }
 
-.content-messages  [class^="message-"] .text-container {
-
-}
-
-.content-messages  [class^="message-"] button {
+.content-messages [class^="message-"] button {
     min-width: 50px;
     padding: 10px;
     flex: 5%;
-    border: thin solid #f1f1f1;
 }
 
-.content-messages .divider {
-
+/*.content-messages  [class^="message-"] .button-done,*/
+.content-messages [class^="message-"] .button-remove {
+    border-left: none !important;
 }
 
 .content-messages .divider h3 {
@@ -225,16 +212,15 @@ button {
 
 /* Modal */
 .overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     position: fixed;
     width: 100%;
     height: 100%;
     background: rgba(30, 30, 30, .7);
     top: 0;
-
-    /* flex-box */
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .overlay .modal-window {

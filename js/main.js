@@ -93,6 +93,9 @@
 
 	var DOM = {
 		// create task
+		// edit task
+		// remove task
+		// drag&drop
 
 	};
 

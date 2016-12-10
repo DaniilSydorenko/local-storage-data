@@ -96,7 +96,7 @@ button {
 
 /* Form */
 .content .content-form {
-    margin-bottom: 30px;
+    /*margin-bottom: 30px;*/
 }
 
 .content .content-form form {
@@ -142,14 +142,15 @@ button {
 }
 
 /* Messages */
-.content-messages #data {
+.content-messages #completed-tasks,
+.content-messages #uncompleted-tasks{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-.content-messages #data [class^="message-"] {
+.content-messages  [class^="message-"] {
     width: 90%;
     display: flex;
     justify-content: flex-start;
@@ -166,43 +167,55 @@ button {
     opacity 0.2s linear;
 }
 
-.content-messages #data [class^="message-"]:last-of-type {
+.content-messages  [class^="message-"]:last-of-type {
     margin: 0;
 }
 
-.content-messages #data [class^="message-"]:hover {
+.content-messages  [class^="message-"]:hover {
     box-shadow: 1px 1px 2px rgba(100, 100, 100, 0.1);
     transition: all .1s ease;
 }
 
-.content-messages #data [class^="message-"].visible {
+.content-messages  [class^="message-"].visible {
     visibility: visible;
     opacity: 1;
 }
 
-.content-messages #data [class^="message-"] p {
+.content-messages  [class^="message-"] p {
     text-align: left;
     margin: 0;
 }
 
-.content-messages #data [class^="message-"] em {
+.content-messages  [class^="message-"] em {
     font-size: .8rem;
 }
 
-.content-messages #data [class^="message-"] .text-container {
+.content-messages  [class^="message-"] .text-container {
     flex: 85%;
     padding: 0 5px;
 }
 
-.content-messages #data [class^="message-"] .text-container {
+.content-messages  [class^="message-"] .text-container {
 
 }
 
-.content-messages #data [class^="message-"] button {
+.content-messages  [class^="message-"] button {
     min-width: 50px;
     padding: 10px;
     flex: 5%;
     border: thin solid #f1f1f1;
+}
+
+.content-messages .divider {
+
+}
+
+.content-messages .divider h3 {
+    text-align: center;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #414141;
 }
 
 /* Footer */

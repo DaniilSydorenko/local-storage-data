@@ -36,25 +36,33 @@
 
 
 		getMessageCount: function () {
-			// can make count by key...
-			return Object.keys(localStorage).length;
-		},
+			var keys = Object.keys(localStorage);
+			var counter = 0;
 
-		saveToStorage: function (key, item) {
-			key = (!key) ? App.getMessageCount() : key;
-			if (!App.storage.getItem(key)) {
-				App.storage.setItem(key, JSON.stringify(item));
+			for (var i = 0; i < keys.length; i++) {
+				if (keys[i].indexOf("task_") >= 0) {
+					counter++;
+				}
 			}
 
-			var res = App.getFromStorage(key);
+			return counter;
+		},
 
-			return {
-				id: key,
+
+		saveToStorage: function (key, item) {
+			key = (!key) ? "task_" + App.getMessageCount() : key;
+			App.storage.setItem(key, JSON.stringify(item));
+			var res = App.getFromStorage(key);
+			var task = {};
+
+			task[key] = {
 				message: res.message,
 				user: res.user,
 				date: res.date,
 				status: res.status
 			};
+
+			return task;
 		},
 
 		getFromStorage: function (key) {
@@ -62,12 +70,11 @@
 		},
 
 		getAllFromStorage: function () {
-			// implement filter for keys ... like callback ???
 			var storage = localStorage;
 			var data = [];
-			var regExp = /^\d+$/;
+			var regExp = /^\d+$/; // regexp for task_ ?
 			for (var key in storage) {
-				if (storage.hasOwnProperty(key) && regExp.test(key)) {
+				if (storage.hasOwnProperty(key) && key.indexOf("task_") >= 0) {
 					// maybe get number of key here and sort ???
 					data[key] = JSON.parse(localStorage.getItem(key));
 				}
@@ -75,8 +82,43 @@
 			return data;
 		},
 
-		init: function () {
+		getUncompletedTasks: function () {
+			var storage = localStorage;
+			var data = [];
+			for (var key in storage) {
+				if (storage.hasOwnProperty(key) && key.indexOf("task_") >= 0 && JSON.parse(storage[key]).status == 1) {
+					// maybe get number of key here and sort ???
+					data[key] = JSON.parse(localStorage.getItem(key));
+				}
+			}
+			return data;
+		},
 
+		getCompletedTasks: function () {
+			var storage = localStorage;
+			var data = [];
+			for (var key in storage) {
+				if (storage.hasOwnProperty(key) && key.indexOf("task_") >= 0 && JSON.parse(storage[key]).status == 2) {
+					// maybe get number of key here and sort ???
+					data[key] = JSON.parse(localStorage.getItem(key));
+				}
+			}
+			return data;
+		},
+
+		completeTask: function (id) {
+			var task = App.getFromStorage(id);
+
+			var res = App.saveToStorage(id, {
+				message: task.message,
+				user: task.user,
+				date: task.date,
+				status: 2
+			});
+			console.log(res);
+		},
+
+		init: function () {
 			var menu = $('.nav-menu');
 			var bar = $('.nav-bar-menu');
 			$('button').on('click', function () {
@@ -96,12 +138,14 @@
 		// edit task
 		// remove task
 		// drag&drop
-
 	};
 
 
-	var tasks = App.getAllFromStorage();
-	var dataContainer = document.getElementById('data');
+	var uncompletedTasks = App.getUncompletedTasks();
+	var completedTasks = App.getCompletedTasks();
+
+	var utContainer = document.getElementById('uncompleted-tasks');
+	var ctContainer = document.getElementById('completed-tasks');
 
 	function createTask(id, text) {
 
@@ -136,43 +180,70 @@
 		return task;
 	}
 
-	for (var item in tasks) {
-		if (tasks.hasOwnProperty(item)) {
-			var messageElement = createTask(item, tasks[item].message);
-			dataContainer.appendChild(messageElement);
+	/**
+	 * Show completed and uncompleted tasks
+	 */
+	function showTasks() {
+		/* Show uncompleted tasks */
+		for (var i in uncompletedTasks) {
+			if (uncompletedTasks.hasOwnProperty(i)) {
+				utContainer.appendChild(createTask(i, uncompletedTasks[i].message));
+			}
+		}
+		/* Show completed tasks */
+		for (var j in completedTasks) {
+			if (completedTasks.hasOwnProperty(j)) {
+				ctContainer.appendChild(createTask(j, completedTasks[j].message));
+			}
 		}
 	}
+
+	showTasks();
 
 	/**
 	 * Events listeners
 	 */
+
+		// Form submit
 	document.getElementById('message-form').addEventListener('submit', function (event) {
 		var date = new Date();
 		var formattedDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
-
 		var taskText = document.getElementById('task').value;
 
 		if (taskText.length != 0) {
-			var item = {
+			var result = App.saveToStorage(null, {
 				user: 'Daniil Sydorenko',
 				message: taskText,
 				date: formattedDate,
 				status: 1
-			};
+			});
 
-			var result = App.saveToStorage(null, item);
+			var key = Object.keys(result)[0];
 
 			// Create and add task to the list
-			var messageElement = createTask(result.id, taskText);
-			dataContainer.appendChild(messageElement);
+			var messageElement = createTask(key, taskText);
+			utContainer.appendChild(messageElement);
 
 			setTimeout(function () {
-				document.querySelector(".message-" + result.id).classList.add('visible');
+				document.querySelector(".message-" + key).classList.add('visible');
 			}, 100);
 		}
 
 		event.preventDefault();
 	});
+
+	// Task complete
+	var buttonsComplete = document.querySelectorAll('.button-done');
+	for (var i = 0; i < buttonsComplete.length; i++) {
+		buttonsComplete[i].addEventListener('click', function () {
+			var taskId = this.parentElement.getAttribute('data-id');
+
+			App.completeTask(taskId);
+			
+			// move complete tasks
+			//ctContainer.appendChild()
+		});
+	}
 
 
 })(jQuery);

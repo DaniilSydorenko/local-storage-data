@@ -9,8 +9,9 @@
 //@TODO NO TASK yet,
 //@TODO Response about success TASK,
 
+//@TODO DRAG & DROP task to completted
 
-(function($){
+(function ($) {
 	'use strict';
 
 	var App = {
@@ -50,7 +51,7 @@
 			};
 		},
 
-		getFromStorage: function(key) {
+		getFromStorage: function (key) {
 			return JSON.parse(localStorage.getItem(key));
 		},
 
@@ -62,22 +63,11 @@
 			for (var key in storage) {
 				if (storage.hasOwnProperty(key) && regExp.test(key)) {
 					// maybe get number of key here and sort ???
-					data[key] =  JSON.parse(localStorage.getItem(key));
+					data[key] = JSON.parse(localStorage.getItem(key));
 				}
 			}
 			return data;
 		},
-
-		editMessage: function (messageId) {
-			var message = App.getFromStorage(messageId);
-			var form = $("<form id=\"edit-form\">" +
-				"<input class=\"message-text\" type=\"text\" value=" + message.message + ">" +
-				"<input class=\"message-id\" type=\"hidden\" value=" + messageId	+ ">" +
-				"<button>Ok</button>" +
-				"</form>");
-			$(".message-" + messageId).html(form);
-		},
-
 
 		init: function () {
 
@@ -90,7 +80,6 @@
 					bar.addClass('active');
 				}
 			});
-
 		}
 	};
 
@@ -125,11 +114,27 @@
 			task.classList.add('visible');
 			task.setAttribute('data-id', id);
 
+			var textContainer = document.createElement('div');
+			textContainer.classList.add('text-container');
+
 			var textElement = document.createElement('p');
 			textElement.classList.add('task-text');
 			textElement.textContent = text;
 
-			task.appendChild(textElement);
+			var buttonDone = document.createElement('button');
+			buttonDone.classList.add('button-done');
+
+			var buttonRemove = document.createElement('button');
+			buttonRemove.classList.add('button-remove');
+
+			var buttonInfo = document.createElement('button');
+			buttonInfo.classList.add('button-info');
+
+			textContainer.appendChild(textElement);
+			task.appendChild(buttonDone);
+			task.appendChild(textContainer);
+			task.appendChild(buttonRemove);
+			task.appendChild(buttonInfo);
 			return task;
 		}
 

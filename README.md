@@ -1,7 +1,6 @@
 TODO List
 ========
 
-## About
 TODO List based on vanilla JavaScript, CSS and HTML. All data stored in local storage of browser.
 I added a temporary view of todo list, look at image below:
 
@@ -33,5 +32,3 @@ Show info
 
 Drag & drop(maybe :))
 ```
-
-## Examples

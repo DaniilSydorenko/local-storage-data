@@ -98,10 +98,11 @@ button {
 
 /* Form */
 .content .content-form form {
+    width: 90%;
+    position: relative;
     display: flex;
     justify-content: flex-end;
     align-items: baseline;
-    width: 90%;
     margin: 0 auto;
 }
 
@@ -114,6 +115,8 @@ button {
 
 .content .content-form fieldset:nth-child(2) {
     position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .content .content-form button {
@@ -178,6 +181,7 @@ button {
 .content-messages [class^="message-"] p {
     text-align: left;
     font-size: 15px;
+    word-break: break-all;
     margin: 0;
 }
 

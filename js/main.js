@@ -5,6 +5,8 @@
 //@TODO NO TASK yet
 //@TODO DRAG & DROP task to completted
 
+//@TODO RegExp for links and time
+
 /**
  * Logic
  * @type {{storage: Storage, getMessageCount: App.getMessageCount, saveToStorage: App.saveToStorage, getFromStorage: App.getFromStorage, getAllFromStorage: App.getAllFromStorage, getUncompletedTasks: App.getUncompletedTasks, getCompletedTasks: App.getCompletedTasks, completeTask: App.completeTask, removeTask: App.removeTask}}
@@ -145,7 +147,7 @@ var ctContainer = document.getElementById('completed-tasks');
 var utDivider = document.querySelector('#uncompleted-tasks > .divider');
 var ctDivider = document.querySelector('#completed-tasks > .divider');
 
-function createTask(id, text) {
+function createTask(id, text, container) {
 	var task = document.createElement('div');
 	task.classList.add('message-' + id);
 	task.classList.add('visible');
@@ -158,12 +160,16 @@ function createTask(id, text) {
 	textElement.classList.add('task-text');
 	textElement.textContent = text;
 
-	var buttonDone = document.createElement('button');
-	buttonDone.classList.add('button-done');
+	var buttonComplete = document.createElement('button');
+	buttonComplete.classList.add('button-complete');
 
-	var btnDoneIco = document.createElement('i');
-	btnDoneIco.classList.add('fa');
-	btnDoneIco.classList.add('fa-thumbs-o-up');
+	var btnCompleteIco = document.createElement('i');
+	btnCompleteIco.classList.add('fa');
+	if (container === "u") {
+		btnCompleteIco.classList.add('fa-thumbs-o-up');
+	} else if (container === "c") {
+		btnCompleteIco.classList.add('fa-thumbs-up');
+	}
 
 	var buttonRemove = document.createElement('button');
 	buttonRemove.classList.add('button-remove');
@@ -180,11 +186,11 @@ function createTask(id, text) {
 	btnInfoIco.classList.add('fa-info-circle');
 
 	textContainer.appendChild(textElement);
-	buttonDone.appendChild(btnDoneIco);
+	buttonComplete.appendChild(btnCompleteIco);
 	buttonRemove.appendChild(btnRemoveIco);
 	buttonInfo.appendChild(btnInfoIco);
 
-	task.appendChild(buttonDone);
+	task.appendChild(buttonComplete);
 	task.appendChild(textContainer);
 	task.appendChild(buttonRemove);
 	task.appendChild(buttonInfo);
@@ -199,13 +205,13 @@ function showTasks() {
 	/* Show uncompleted tasks */
 	for (var i in uncompletedTasks) {
 		if (uncompletedTasks.hasOwnProperty(i)) {
-			utContainer.appendChild(createTask(i, uncompletedTasks[i].message));
+			utContainer.appendChild(createTask(i, uncompletedTasks[i].message, "u"));
 		}
 	}
 	/* Show completed tasks */
 	for (var j in completedTasks) {
 		if (completedTasks.hasOwnProperty(j)) {
-			ctContainer.appendChild(createTask(j, completedTasks[j].message));
+			ctContainer.appendChild(createTask(j, completedTasks[j].message, "c"));
 		}
 	}
 
@@ -221,72 +227,70 @@ function showTasks() {
 
 showTasks();
 
-(function () {
 
-	/**
-	 * Events listeners
-	 */
+/**
+ * Events listeners
+ */
 
-		// Form submit
-	document.getElementById('message-form').addEventListener('submit', function (event) {
-		var date = new Date();
-		var formattedDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
-		var taskText = document.getElementById('task').value;
+// Form submit
+document.getElementById('message-form').addEventListener('submit', function (event) {
+	var date = new Date();
+	var formattedDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
+	var taskText = document.getElementById('task').value;
 
-		if (taskText.length != 0) {
-			var result = App.saveToStorage(null, {
-				user: 'Daniil Sydorenko',
-				message: taskText,
-				date: formattedDate,
-				status: 1
-			});
+	if (taskText.length != 0) {
+		var result = App.saveToStorage(null, {
+			user: 'Daniil Sydorenko',
+			message: taskText,
+			date: formattedDate,
+			status: 1
+		});
 
-			var key = Object.keys(result)[0];
+		var key = Object.keys(result)[0];
 
-			// Create and add task to the list
-			var messageElement = createTask(key, taskText);
-			utContainer.appendChild(messageElement);
+		// Create and add task to the list
+		var messageElement = createTask(key, taskText, "u");
+		utContainer.appendChild(messageElement);
 
-			// Clean input
-			document.getElementById('task').value = '';
+		// Clean input
+		document.getElementById('task').value = '';
 
-			setTimeout(function () {
-				document.querySelector(".message-" + key).classList.add('visible');
-			}, 100);
-		}
+		setTimeout(function () {
+			document.querySelector(".message-" + key).classList.add('visible');
+		}, 100);
+	}
 
-		event.preventDefault();
+	event.preventDefault();
+});
+
+// Task complete
+var buttonsComplete = document.querySelectorAll('.button-complete');
+for (var i = 0; i < buttonsComplete.length; i++) {
+	buttonsComplete[i].addEventListener('click', function (e) {
+		var task = this.parentElement;
+		var taskId = task.getAttribute('data-id');
+		App.completeTask(taskId);
+		ctContainer.appendChild(task);
+	}, true);
+}
+
+// Task remove
+var buttonsRemove = document.querySelectorAll('.button-remove');
+for (var j = 0; j < buttonsRemove.length; j++) {
+	buttonsRemove[j].addEventListener('click', function () {
+		var task = this.parentElement;
+		var taskId = task.getAttribute('data-id');
+		App.removeTask(taskId);
+		task.style.display = "none";
 	});
+}
 
-	// Task complete
-	var buttonsComplete = document.querySelectorAll('.button-done');
-	for (var i = 0; i < buttonsComplete.length; i++) {
-		buttonsComplete[i].addEventListener('click', function () {
-			var task = this.parentElement;
-			var taskId = task.getAttribute('data-id');
-			App.completeTask(taskId);
-			ctContainer.appendChild(task);
-		});
+// Header
+buttonMenu.addEventListener('click', function () {
+	if (bar.className == 'active') {
+		bar.classList.remove('active');
+	} else {
+		bar.classList.add('active');
 	}
+});
 
-	// Task remove
-	var buttonsRemove = document.querySelectorAll('.button-remove');
-	for (var j = 0; j < buttonsRemove.length; j++) {
-		buttonsRemove[j].addEventListener('click', function () {
-			var task = this.parentElement;
-			var taskId = task.getAttribute('data-id');
-			App.removeTask(taskId);
-			task.style.display = "none";
-		});
-	}
-
-	// Header
-	buttonMenu.addEventListener('click', function () {
-		if (bar.className == 'active') {
-			bar.classList.remove('active');
-		} else {
-			bar.classList.add('active');
-		}
-	})
-
-})();

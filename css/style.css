@@ -42,7 +42,7 @@ button {
 /* Main styles
 =================================*/
 .wrapper {
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     background: #fbfbfb;
 }
@@ -196,10 +196,19 @@ button {
     flex: 5%;
 }
 
-/*.content-messages  [class^="message-"] .button-done,*/
 .content-messages [class^="message-"] .button-remove {
     border-left: none !important;
 }
+
+.content-messages [class^="message-"] .button-remove > i {
+    color: #f7b7b7;
+}
+
+.content-messages [class^="message-"] .button-info > i {
+    color: #cad4ef;
+}
+
+/*#completed-tasks .button-complete */
 
 .content-messages .divider h3 {
     text-align: center;

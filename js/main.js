@@ -15,24 +15,6 @@ var App = {
 
 	storage: localStorage,
 
-	//getData: function (url, callback) {
-	//	$.getJSON(url, function (data) {
-	//		if (typeof callback == "function")
-	//			callback(data);
-	//	}).done(function () {
-	//		console.log("Success");
-	//	}).fail(function () {
-	//		console.log("Error");
-	//	});
-	//},
-
-	//App.getData('storage/user.json', getUser);
-	//
-	//function getUser(data) {
-	//	//console.log(data);
-	//}
-
-
 	getMessageCount: function () {
 		var keys = Object.keys(localStorage);
 		var counter = 0;
